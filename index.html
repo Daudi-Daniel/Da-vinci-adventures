@@ -140,96 +140,88 @@
           <div>
             <div style="font-weight: 800">Da-vinci Adventures</div>
             <div style="font-size: 0.85rem; color: var(--muted)">
-              Creative code • Experiments • Demos
+              Food • Outdoor • Community
             </div>
           </div>
         </div>
         <nav aria-label="Primary">
-          <a href="#projects">Projects</a>
+          <a href="food adventure.html">Food</a>
+          <a href="hiking/outdoor adventure.html">Outdoor</a>
+          <a href="community hub.html">Community</a>
           <a href="#about">About</a>
-          <a href="#contact">Contact</a>
         </nav>
       </header>
 
       <main>
         <section class="hero" role="region" aria-labelledby="hero-title">
           <div>
-            <h1 id="hero-title">Welcome to Da-vinci Adventures</h1>
+            <h1 id="hero-title">Discover Your Next Adventure</h1>
             <p class="lead">
-              A collection of interactive experiments, visual demos, and small
-              creative projects. Use this index.html as the entry point for your
-              site — add sections, examples, and links to live demos or source
-              code below.
+              Whether you're a foodie looking for your next culinary experience or an outdoor enthusiast seeking new trails, 
+              Da-vinci Adventures helps you discover, track, and share your adventures.
             </p>
 
-            <div class="card" style="margin-top: 16px">
-              <strong>Getting started</strong>
-              <ul style="color: var(--muted); margin: 10px 0 0 18px">
-                <li>Place project folders next to this index.html</li>
-                <li>Link demos in the "Projects" section</li>
-                <li>Use /assets for images, styles, and scripts</li>
-              </ul>
+            <div class="projects" aria-live="polite">
+              <article class="project" onclick="window.location='food adventure.html'" style="cursor:pointer">
+                <strong>Food Adventures</strong>
+                <div style="color: var(--muted); margin-top: 6px">
+                  Track calories, discover restaurants, join food events, and share recipes with fellow food lovers.
+                </div>
+              </article>
+              <article class="project" onclick="window.location='hiking/outdoor adventure.html'" style="cursor:pointer">
+                <strong>Outdoor Adventures</strong>
+                <div style="color: var(--muted); margin-top: 6px">
+                  Find hiking trails, join group activities, track your progress, and discover outdoor events.
+                </div>
+              </article>
+              <article class="project" onclick="window.location='community hub.html'" style="cursor:pointer" id="community">
+                <strong>Community Hub</strong>
+                <div style="color: var(--muted); margin-top: 6px">
+                  Join interest-based communities, participate in events, and connect with like-minded adventurers.
+                </div>
+              </article>
             </div>
 
-            <section id="projects" style="margin-top: 20px">
-              <h2 style="font-size: 1.05rem; margin: 6px 0">
-                Featured Projects
-              </h2>
-              <div class="projects" aria-live="polite">
-                <article class="project">
-                  <strong>Sketch — Canvas experiments</strong>
-                  <div style="color: var(--muted); margin-top: 6px">
-                    A lightweight canvas playground for generative art.
-                  </div>
-                </article>
-                <article class="project">
-                  <strong>Tour — Interactive map</strong>
-                  <div style="color: var(--muted); margin-top: 6px">
-                    A guided interactive story with map-based navigation.
-                  </div>
-                </article>
-                <article class="project">
-                  <strong>Labs — WebGL demos</strong>
-                  <div style="color: var(--muted); margin-top: 6px">
-                    Small shader experiments and 3D scenes.
-                  </div>
-                </article>
+            <section class="card" style="margin-top: 20px">
+              <h2 style="font-size: 1.05rem; margin: 6px 0">Upcoming Events</h2>
+              <div style="color: var(--muted); margin-top: 10px">
+                <ul style="list-style: none; padding: 0; margin: 0">
+                  <li style="margin-bottom: 10px">
+                    🍽 <a href="food adventure.html" style="color: var(--accent); text-decoration: none">Wine Tasting Masterclass</a> - Nov 20, 2025
+                  </li>
+                  <li style="margin-bottom: 10px">
+                    🥾 <a href="hiking/outdoor adventure.html" style="color: var(--accent); text-decoration: none">Night Trail Run</a> - Nov 22, 2025
+                  </li>
+                  <li style="margin-bottom: 10px">
+                    💻 <a href="#" style="color: var(--accent); text-decoration: none">Tech Hackathon</a> - Dec 1, 2025
+                  </li>
+                </ul>
               </div>
             </section>
           </div>
 
           <aside class="card" aria-labelledby="sidebar-title">
-            <h3 id="sidebar-title" style="margin: 0 0 8px 0">Quick links</h3>
+            <h3 id="sidebar-title" style="margin: 0 0 8px 0">Quick Stats</h3>
             <ul style="color: var(--muted); padding-left: 18px; margin: 0">
-              <li>
-                <a
-                  href="README.md"
-                  style="color: var(--accent); text-decoration: none"
-                  >Repository README</a
-                >
-              </li>
-              <li>
-                <a
-                  href="assets/"
-                  style="color: var(--accent); text-decoration: none"
-                  >Assets folder</a
-                >
-              </li>
-              <li>
-                <a href="#" style="color: var(--accent); text-decoration: none"
-                  >New project template</a
-                >
-              </li>
+              <li>Active Communities: 15+</li>
+              <li>Monthly Events: 50+</li>
+              <li>Active Members: 5000+</li>
             </ul>
+            <div style="margin-top: 16px">
+              <button onclick="window.location='prototype app.html'" 
+                      style="width: 100%; padding: 10px; border-radius: 8px; border: none; 
+                             background: var(--accent); color: #022; font-weight: 700; cursor: pointer">
+                Try the App Prototype
+              </button>
+            </div>
           </aside>
         </section>
 
         <section id="about" class="card" style="margin-top: 20px">
-          <h2 style="margin: 0 0 8px 0">About</h2>
+          <h2 style="margin: 0 0 8px 0">About Da-vinci Adventures</h2>
           <p style="color: var(--muted); margin: 0">
-            This repository hosts small experiments and demos inspired by
-            creative coding. Modify this file to reflect your project's goals
-            and link to live demos or example pages.
+            Da-vinci Adventures is your all-in-one platform for discovering and tracking both culinary and outdoor adventures. 
+            Whether you're counting calories, finding new hiking trails, or joining community events, we've got you covered.
           </p>
         </section>
 
