@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Food Adventure — Features</title>
+    <style>
+      :root {
+        --bg-1: #071029;
+        --bg-2: #0b2340;
+        --card: rgba(255, 255, 255, 0.06);
+        --muted: #9aa6b2;
+        --accent: #6ee7b7;
+        --accent-2: #60a5fa;
+        --glass: rgba(255, 255, 255, 0.04);
+        --radius: 14px;
+        --mono: "SFMono-Regular", Menlo, Monaco, "Roboto Mono", monospace;
+        --ui: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial;
+      }
+
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        font-family: var(--ui);
+        background: linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
+        color: #e6eef6;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-font-feature-settings: "liga";
+      }
+
+      .wrap {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 28px;
+      }
+
+      /* Header: stacked and centered */
+      header.app-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 22px;
+        padding: 18px 12px;
+        text-align: center;
+      }
+
+      header.app-header .logo {
+        width: 64px;
+        height: 64px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, var(--accent-2), #8b5cf6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 800;
+        font-family: var(--mono);
+        box-shadow: 0 8px 30px rgba(8, 23, 42, 0.6);
+        letter-spacing: 0.6px;
+      }
+
+      header.app-header h1 {
+        margin: 0;
+        font-size: 22px;
+        letter-spacing: -0.2px;
+        padding: 12px 0;
+        color: #eafff5;
+        line-height: 1.05;
+      }
+
+      header.app-header p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .card {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0.01)
+        );
+        border-radius: var(--radius);
+        box-shadow: 0 12px 40px rgba(2, 6, 23, 0.6);
+        padding: 26px;
+        overflow: auto;
+        border: 1px solid rgba(255, 255, 255, 0.03);
+      }
+
+      /* content block */
+      pre.content {
+        margin: 0;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        font-family: var(--ui);
+        font-size: 15px;
+        line-height: 1.7;
+        color: #e6eef6;
+        background: linear-gradient(
+          180deg,
+          rgba(10, 18, 30, 0.45),
+          rgba(8, 14, 24, 0.35)
+        );
+        border: 1px solid rgba(255, 255, 255, 0.03);
+        padding: 22px;
+        border-radius: 10px;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+      }
+
+      /* Make any real H1s (if present) centered and padded */
+      h1 {
+        padding: 14px 0;
+        text-align: center;
+        margin: 8px 0;
+        font-size: 18px;
+        color: var(--accent);
+        font-weight: 700;
+        letter-spacing: -0.2px;
+      }
+
+      /* subtle emphasis for section labels inside the pre text */
+      .muted {
+        color: var(--muted);
+      }
+
+      .meta {
+        margin-top: 16px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      a {
+        color: var(--accent-2);
+        text-decoration: none;
+      }
+
+      @media (max-width: 720px) {
+        .wrap {
+          padding: 16px;
+          margin: 18px auto;
+        }
+        header.app-header h1 {
+          font-size: 18px;
+        }
+        pre.content {
+          font-size: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="app-header">
+        <div class="logo">FA</div>
+        <div>
+          <h1>Food Adventure — Feature Notes</h1>
+        </div>
+      </header>
+
+      <section class="card">
+        <pre class="content">
+Mobile app where users upload meal photos → AI asks clarifying questions → app estimates calories and logs intake.
+Tracks daily/weekly/monthly totals, shows trends, offers personalized guidance, recipes, nearby food joints, social features and event sharing, plus activity suggestions and calorie-burn estimates.
+Core feature set
+
+<h1 style="padding:12px 0; text-align:center; margin:0; font-size:18px;">
+    Photo-based meal analysis
+</h1>
+Image recognition + segmentation to identify items on plate.
+Follow-up Q&A (portion size, ingredients, cooking method) to refine estimates.
+Portion-size estimation aids: reference object, user-entered portion, or scale-based input.
+<h1 style="padding:12px 0; text-align:center; margin:0; font-size:18px;">
+    Calorie & nutrient calculation
+</h1>
+Map recognized items to nutrition database (USDA/FoodData Central or commercial API).
+Return calories + basic macro split (protein, fat, carbs) and optionally micronutrients.
+<h1 style="padding:12px 0; text-align:center; margin:0; font-size:18px;">
+    Logging & aggregation
+</h1>
+Per-meal logs with timestamp, tags, photos.
+Aggregates: daily, weekly, monthly totals and averages.
+Visual trends and comparisons to goals.
+<h1 style="padding:12px 0; text-align:center; margin:0; font-size:18px;">
+    Personalized recommendations
+</h1>
+Weekly summaries with benefits/risks, progress notes, and suggestions for next week.
+Tailored tips: portion control, ingredient swaps, meal timing.
+Premium features
+Deeper food benefits/risks analysis and personalized nutrition coaching content.
+Exercise planning: suggested workouts and estimated calories burned.
+Integrated intake/output tracking and progress reports, exportable data.
+<h1 style="padding:12px 0; text-align:center; margin:0; font-size:18px;">
+    Recipes & discovery
+</h1>
+Recipe library, user-submitted recipes, ingredient lists, calorie per serving.
+Save/clone recipes and auto-add to log.
+<h1 style="padding:12px 0; text-align:center; margin:0; font-size:18px;">
+    Maps & local discovery
+</h1>
+Show nearby food joints, user ratings, approximate menu calorie highlights.
+Directions and event locations.
+<h1 style="padding:12px 0; text-align:center; margin:0; font-size:18px;">
+    Social & community
+</h1>
+Feed for recipes, photos, kitchen shots, events, cookouts, cookathons.
+Event creation and RSVP, group challenges (marathon, hikes).
+Share routes, mileage, and estimated calories burned for group activities.
+<h1 style="padding:12px 0; text-align:center; margin:0; font-size:18px;">
+    Activity routing & calorie burn
+</h1>
+Suggest nearby walking/hiking routes with distance, elevation, and estimated calories burned (based on user weight/pace).
+Integration options: HealthKit/Google Fit, Strava, GPS.
+AI & technical considerations
+
+<h1 style="padding:12px 0; text-align:center; margin:0; font-size:18px;">
+    Models & pipelines
+</h1>
+Image model for food recognition (fine-tuned vision model).
+Multimodal LLM for follow-up Q&A, portion inference, and explanation text.
+Nutrition lookup service that maps labels to database entries.
+
+<h1 style="padding:12px 0; text-align:center; margin:0; font-size:18px;">
+    User interaction
+</h1>
+Show confidence score; ask clarifying questions when confidence is low.
+Allow user corrections and reuse corrections to improve personalization.
+Portion estimation techniques
+Depth/size via dual-camera or reference object, user-entered measures, or slider-based portion scaling.
+<h1 style="padding:12px 0; text-align:center; margin:0; font-size:18px;">
+    Data sources
+</h1>
+Food databases: USDA FoodData Central, Open Food Facts, commercial nutrition APIs for completeness.
+Exercise MET values or fitness APIs for calorie burn estimates. 
+        </pre>
+
+        <div class="meta">
+          <div style="width: 100%; text-align: center">food adventure</div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
