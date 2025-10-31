@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Outdoor Adventure — Features</title>
+    <style>
+      :root {
+        --bg-1: #062017;
+        --bg-2: #0b3b2a;
+        --card: rgba(255, 255, 255, 0.04);
+        --muted: #9fb7a8;
+        --accent: #8ee5a1;
+        --accent-2: #4fd1a3;
+        --glass: rgba(255, 255, 255, 0.03);
+        --radius: 14px;
+        --mono: "SFMono-Regular", Menlo, Monaco, "Roboto Mono", monospace;
+        --ui: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial;
+      }
+
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        font-family: var(--ui);
+        background: linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
+        color: #e8f8f0;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .wrap {
+        max-width: 1100px;
+        margin: 36px auto;
+        padding: 28px;
+      }
+
+      /* Header: stacked + centered */
+      header.app-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        text-align: center;
+        margin-bottom: 22px;
+        padding: 18px 12px;
+      }
+
+      header.app-header .logo {
+        width: 64px;
+        height: 64px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, var(--accent-2), #2baf7a);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 800;
+        font-family: var(--mono);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+        letter-spacing: 0.6px;
+      }
+
+      header.app-header h1 {
+        margin: 0;
+        font-size: 22px;
+        padding: 12px 0;
+        color: var(--accent);
+        line-height: 1.05;
+        letter-spacing: -0.2px;
+        text-align: center;
+      }
+
+      header.app-header p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .card {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0.01)
+        );
+        border-radius: var(--radius);
+        box-shadow: 0 14px 48px rgba(0, 0, 0, 0.55);
+        padding: 26px;
+        overflow: auto;
+        border: 1px solid rgba(255, 255, 255, 0.03);
+      }
+
+      pre.content {
+        margin: 0;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        font-family: var(--ui);
+        font-size: 15px;
+        line-height: 1.7;
+        color: #eaf7f0;
+        background: linear-gradient(
+          180deg,
+          rgba(3, 18, 12, 0.45),
+          rgba(6, 26, 18, 0.35)
+        );
+        border: 1px solid rgba(255, 255, 255, 0.03);
+        padding: 22px;
+        border-radius: 10px;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+      }
+
+      /* centered, padded headings used throughout the content */
+      h1.section {
+        padding: 14px 0;
+        text-align: center;
+        margin: 8px 0;
+        font-size: 18px;
+        color: var(--accent);
+        font-weight: 700;
+        letter-spacing: -0.2px;
+      }
+
+      .meta {
+        margin-top: 16px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        color: var(--muted);
+        font-size: 13px;
+        justify-content: center;
+      }
+
+      a {
+        color: var(--accent-2);
+        text-decoration: none;
+      }
+
+      @media (max-width: 720px) {
+        .wrap {
+          padding: 16px;
+          margin: 18px auto;
+        }
+        header.app-header h1 {
+          font-size: 18px;
+        }
+        pre.content {
+          font-size: 14px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <header class="app-header">
+        <div class="logo">OA</div>
+        <div>
+          <h1>Outdoor Adventure — Feature Notes</h1>
+          <p>
+            Routes, operators, bookings, safety and social — compact spec
+            (styled)
+          </p>
+        </div>
+      </header>
+
+      <section class="card">
+        <pre class="content">
+This app surfaces adventure routes and upcoming guided trips → users can browse routes, inspect operator details, pricing and logistics, then book or save trips for planning.
+
+Core feature set
+
+<h1 class="section">Route discovery & preview</h1>
+Search nearby or anywhere by filters: difficulty, distance, elevation gain, scenery, duration, accessibility.
+Route preview: map polyline, elevation profile, photos, POIs, estimated time & calories burned.
+Difficulty badge, best season, permits required, surface and gear notes.
+
+<h1 class="section">Guided trips & operators</h1>
+Operator profiles with ratings, schedules, pricing, transport options, itinerary, inclusions/exclusions, insurance & cancellation policies.
+Upcoming trip calendar and booking flow; group size, skill requirements and refunds.
+
+<h1 class="section">Booking & planning</h1>
+Save routes/trips to itinerary; sync with calendar; flexible dates and payment (Stripe).
+Packing/gear checklists and pre-trip briefings; suggested accommodations and transport.
+
+<h1 class="section">Maps & route guidance</h1>
+Interactive map (Google/Mapbox) with offline route downloads, turn-by-turn guidance, GPX/KML export and shareable route links.
+Integration with GPS devices, Strava, Garmin.
+
+<h1 class="section">Safety & logistics</h1>
+Emergency contacts, nearest hospitals, live weather, avalanche/fire alerts, trail closures and permit guidance.
+Route risk score and required skill badges; suggested contingency plans.
+
+<h1 class="section">Social & community</h1>
+Feed for trip photos, route reviews, meetup events, group challenges and story posts.
+Event creation, RSVP, group chat, shared GPX routes and trip reports.
+
+<h1 class="section">Activity metrics & calorie burn</h1>
+Estimate calories burned using distance, elevation and user weight/pace (METs).
+Track time, distance, elevation gain, pace; compare weekly/monthly totals and set goals.
+
+<h1 class="section">AI & technical considerations</h1>
+Personalized recommendations based on user history, fitness level and available free time.
+Route-summarization, risk inference, equipment Q&A, and operator-matching using ML and an LLM assistant.
+Confidence scores for AI suggestions; allow user corrections and feedback loop.
+
+<h1 class="section">Data sources & integrations</h1>
+Trail data: OpenStreetMap, Hiking Project, AllTrails-style APIs, and local park services.
+Weather: OpenWeatherMap, Meteo APIs. Events & operators: ingest ICS/JSON feeds or partner APIs.
+Fitness: Google Fit, Apple HealthKit, Strava. Payments: Stripe.
+
+<h1 class="section">Privacy, offline & scaling</h1>
+Offline maps & routes stored locally with opt-in sync. Encrypted personal data, GDPR/CCPA awareness.
+Backend: tile caching, routing services, job queue for data imports, admin tools for operator onboarding.
+
+MVP recommendation
+- Route discovery + map preview + basic route metrics.
+- Operator trip listing + simple booking flow.
+- Save itinerary + calendar sync + shareable GPX.
+- Basic social feed + event RSVP.
+
+Metrics to track
+- Routes discovered, bookings, DAU/WAU, average trip group size, user-reported route accuracy.
+- Safety alerts acknowledged and community engagement.
+
+Next steps
+- Define MVP user flows and acceptance criteria.
+- Choose maps/routing providers and payment provider.
+- Prototype map UI, route preview and operator card.
+        </pre>
+
+        <div class="meta">
+          <div style="width: 100%; text-align: center">
+            outdoor adventure — rendered preview
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
