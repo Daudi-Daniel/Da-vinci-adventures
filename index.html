@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Da-vinci Adventures</title>
+    <meta
+      name="description"
+      content="Da-vinci Adventures — creative projects, experiments, and demos."
+    />
+    <meta name="author" content="Da-vinci Adventures" />
+    <link rel="icon" href="favicon.ico" />
+
+    <style>
+      :root {
+        --bg: #0f1724;
+        --card: #0b1220;
+        --accent: #6ee7b7;
+        --muted: #9aa4b2;
+        --text: #e6eef6;
+        --radius: 12px;
+        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        background: linear-gradient(180deg, #07102b 0%, var(--bg) 100%);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      .container {
+        width: min(1100px, 94%);
+        margin: 28px auto 48px;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+      .brand {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      .logo {
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, var(--accent), #60a5fa);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: #022;
+        box-shadow: 0 6px 20px rgba(6, 10, 30, 0.6);
+      }
+      nav a {
+        color: var(--muted);
+        text-decoration: none;
+        margin-left: 18px;
+        font-weight: 600;
+      }
+      .hero {
+        margin-top: 28px;
+        padding: 28px;
+        border-radius: var(--radius);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0.01)
+        );
+        display: grid;
+        grid-template-columns: 1fr 320px;
+        gap: 20px;
+        align-items: start;
+      }
+      h1 {
+        margin: 0;
+        font-size: clamp(1.6rem, 3vw, 2.25rem);
+      }
+      p.lead {
+        color: var(--muted);
+        margin-top: 10px;
+        line-height: 1.5;
+      }
+      .card {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0.01)
+        );
+        padding: 16px;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(2, 6, 23, 0.6);
+      }
+      .projects {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+        margin-top: 20px;
+      }
+      .project {
+        padding: 12px;
+        border-radius: 10px;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.01),
+          rgba(0, 0, 0, 0.02)
+        );
+        border: 1px solid rgba(255, 255, 255, 0.03);
+      }
+      footer {
+        margin-top: auto;
+        padding: 18px 0;
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+      @media (max-width: 800px) {
+        .hero {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="brand">
+          <div class="logo" aria-hidden>Dv</div>
+          <div>
+            <div style="font-weight: 800">Da-vinci Adventures</div>
+            <div style="font-size: 0.85rem; color: var(--muted)">
+              Creative code • Experiments • Demos
+            </div>
+          </div>
+        </div>
+        <nav aria-label="Primary">
+          <a href="#projects">Projects</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="hero" role="region" aria-labelledby="hero-title">
+          <div>
+            <h1 id="hero-title">Welcome to Da-vinci Adventures</h1>
+            <p class="lead">
+              A collection of interactive experiments, visual demos, and small
+              creative projects. Use this index.html as the entry point for your
+              site — add sections, examples, and links to live demos or source
+              code below.
+            </p>
+
+            <div class="card" style="margin-top: 16px">
+              <strong>Getting started</strong>
+              <ul style="color: var(--muted); margin: 10px 0 0 18px">
+                <li>Place project folders next to this index.html</li>
+                <li>Link demos in the "Projects" section</li>
+                <li>Use /assets for images, styles, and scripts</li>
+              </ul>
+            </div>
+
+            <section id="projects" style="margin-top: 20px">
+              <h2 style="font-size: 1.05rem; margin: 6px 0">
+                Featured Projects
+              </h2>
+              <div class="projects" aria-live="polite">
+                <article class="project">
+                  <strong>Sketch — Canvas experiments</strong>
+                  <div style="color: var(--muted); margin-top: 6px">
+                    A lightweight canvas playground for generative art.
+                  </div>
+                </article>
+                <article class="project">
+                  <strong>Tour — Interactive map</strong>
+                  <div style="color: var(--muted); margin-top: 6px">
+                    A guided interactive story with map-based navigation.
+                  </div>
+                </article>
+                <article class="project">
+                  <strong>Labs — WebGL demos</strong>
+                  <div style="color: var(--muted); margin-top: 6px">
+                    Small shader experiments and 3D scenes.
+                  </div>
+                </article>
+              </div>
+            </section>
+          </div>
+
+          <aside class="card" aria-labelledby="sidebar-title">
+            <h3 id="sidebar-title" style="margin: 0 0 8px 0">Quick links</h3>
+            <ul style="color: var(--muted); padding-left: 18px; margin: 0">
+              <li>
+                <a
+                  href="README.md"
+                  style="color: var(--accent); text-decoration: none"
+                  >Repository README</a
+                >
+              </li>
+              <li>
+                <a
+                  href="assets/"
+                  style="color: var(--accent); text-decoration: none"
+                  >Assets folder</a
+                >
+              </li>
+              <li>
+                <a href="#" style="color: var(--accent); text-decoration: none"
+                  >New project template</a
+                >
+              </li>
+            </ul>
+          </aside>
+        </section>
+
+        <section id="about" class="card" style="margin-top: 20px">
+          <h2 style="margin: 0 0 8px 0">About</h2>
+          <p style="color: var(--muted); margin: 0">
+            This repository hosts small experiments and demos inspired by
+            creative coding. Modify this file to reflect your project's goals
+            and link to live demos or example pages.
+          </p>
+        </section>
+
+        <section id="contact" style="margin-top: 16px">
+          <div class="card">
+            <h3 style="margin: 0 0 8px 0">Contact</h3>
+            <p style="color: var(--muted); margin: 0 0 10px 0">
+              Add contact info or links to socials and maintainers here.
+            </p>
+            <form
+              onsubmit="event.preventDefault();alert('Replace with real contact handling.')"
+              style="display: flex; gap: 8px; margin-top: 10px"
+            >
+              <input
+                type="email"
+                placeholder="your@email.example"
+                required
+                style="
+                  flex: 1;
+                  padding: 8px;
+                  border-radius: 8px;
+                  border: 1px solid rgba(255, 255, 255, 0.04);
+                  background: transparent;
+                  color: var(--text);
+                "
+              />
+              <button
+                type="submit"
+                style="
+                  padding: 8px 12px;
+                  border-radius: 8px;
+                  border: none;
+                  background: var(--accent);
+                  color: #022;
+                  font-weight: 700;
+                "
+              >
+                Send
+              </button>
+            </form>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        © <span id="year"></span> Da-vinci Adventures — Built with HTML & CSS
+      </footer>
+    </div>
+
+    <script>
+      // Minimal JS: set year and simple progressive enhancement
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
