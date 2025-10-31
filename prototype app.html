@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Da-vinci Adventures — Prototype</title>
+    <style>
+      :root {
+        --bg: #0f1724;
+        --card: #0b1220;
+        --muted: #98a8b9;
+        --accent: #60a5fa;
+        --accent-2: #7efabc;
+        --glass: rgba(255, 255, 255, 0.03);
+        --radius: 12px;
+        --ui: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: var(--ui);
+        background: linear-gradient(180deg, #071029 0%, #071a2a 100%);
+        color: #e6eef6;
+        -webkit-font-smoothing: antialiased;
+      }
+      .app {
+        max-width: 1100px;
+        margin: 28px auto;
+        padding: 20px;
+      }
+
+      /* Top bar with 3 logos */
+      .top {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+      }
+      .logos {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      .logo-btn {
+        width: 64px;
+        height: 64px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        user-select: none;
+        font-weight: 700;
+        letter-spacing: 0.6px;
+        color: #031021;
+        background: linear-gradient(135deg, var(--accent-2), var(--accent));
+        box-shadow: 0 8px 30px rgba(2, 6, 23, 0.6);
+        transition: transform 0.12s, opacity 0.12s;
+      }
+      .logo-btn.dim {
+        opacity: 0.5;
+        background: linear-gradient(135deg, #20343f, #2d3f57);
+        color: #cfe6ff;
+      }
+      .logo-btn:active {
+        transform: translateY(1px);
+      }
+
+      /* controls and summary on right */
+      .right-controls {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      .summary {
+        background: var(--card);
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: 1px solid var(--glass);
+        min-width: 220px;
+        text-align: left;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .summary b {
+        color: var(--accent-2);
+        display: block;
+        font-size: 14px;
+      }
+
+      /* layout */
+      .main {
+        display: grid;
+        grid-template-columns: 1fr 320px;
+        gap: 16px;
+        align-items: start;
+      }
+      .feed {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0.01)
+        );
+        padding: 14px;
+        border-radius: 12px;
+        border: 1px solid var(--glass);
+      }
+      .side {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.015),
+          rgba(255, 255, 255, 0.01)
+        );
+        padding: 14px;
+        border-radius: 12px;
+        border: 1px solid var(--glass);
+        color: var(--muted);
+      }
+
+      .item {
+        display: flex;
+        gap: 12px;
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.01),
+          transparent
+        );
+      }
+      .thumb {
+        width: 96px;
+        height: 72px;
+        background: #091726;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .item .meta {
+        flex: 1;
+      }
+      .item h3 {
+        margin: 0 0 6px 0;
+        font-size: 15px;
+        color: #dff7ff;
+      }
+      .item p {
+        margin: 0 0 8px 0;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .item .actions {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .btn {
+        padding: 8px 10px;
+        border-radius: 8px;
+        border: 0;
+        cursor: pointer;
+        font-weight: 600;
+        background: var(--accent);
+        color: #031021;
+      }
+      .btn.ghost {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        color: var(--muted);
+      }
+      small.muted {
+        color: var(--muted);
+        display: block;
+        margin-top: 6px;
+      }
+
+      /* modal */
+      .modal-back {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 30;
+      }
+      .modal {
+        background: #071526;
+        padding: 18px;
+        border-radius: 12px;
+        min-width: 320px;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        color: #e6eef6;
+      }
+      .modal h4 {
+        margin: 0 0 8px 0;
+      }
+      .row {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+      input,
+      select {
+        padding: 8px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        background: transparent;
+        color: inherit;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .logs {
+        max-height: 360px;
+        overflow: auto;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .log-entry {
+        padding: 8px;
+        border-bottom: 1px dashed rgba(255, 255, 255, 0.02);
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      .filters {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+
+      /* Add to the existing CSS */
+      .community-badge {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 6px;
+        background: var(--glass);
+        color: var(--accent);
+        font-size: 12px;
+        margin-right: 8px;
+      }
+
+      .community-stats {
+        display: flex;
+        gap: 12px;
+        font-size: 13px;
+        color: var(--muted);
+        margin-top: 8px;
+      }
+
+      .community-stats span {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      @media (max-width: 900px) {
+        .main {
+          grid-template-columns: 1fr;
+        }
+        .right-controls {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <div class="top">
+        <div class="logos" role="tablist" aria-label="Segments">
+  <div id="allBtn" class="logo-btn" data-seg="all" title="All">ALL</div>
+  <div id="foodBtn" class="logo-btn dim" data-seg="food" title="Food">FOOD</div>
+  <div id="outBtn" class="logo-btn dim" data-seg="outdoor" title="Outdoor">OUT</div>
+  <div id="comBtn" class="logo-btn dim" data-seg="community" title="Communities">COM</div>
+</div>
+          <div
+            id="outBtn"
+            class="logo-btn dim"
+            data-seg="outdoor"
+            title="Outdoor"
+          >
+            OUT
+          </div>
+        </div>
+
+        <div class="right-controls">
+          <div class="summary" id="summary">
+            <div><small>Today</small><b id="todayTotal">0 kcal</b></div>
+            <div style="margin-top: 6px">
+              <small>This week</small><b id="weekTotal">0 kcal</b>
+            </div>
+            <div style="margin-top: 6px">
+              <small>Monthly</small><b id="monthTotal">0 kcal</b>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="main">
+        <div class="feed" id="feed">
+          <!-- feed items populated by JS -->
+        </div>
+
+        <aside class="side">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 8px;
+            "
+          >
+            <strong>Quick Logs</strong>
+            <div style="font-size: 12px; color: var(--muted)">
+              <button
+                id="clearLogs"
+                class="btn ghost"
+                style="font-size: 12px; padding: 6px"
+              >
+                Clear
+              </button>
+            </div>
+          </div>
+
+          <div class="filters">
+            <button class="btn ghost" data-filter="all">All</button>
+            <button class="btn ghost" data-filter="food">Food</button>
+            <button class="btn ghost" data-filter="outdoor">Outdoor</button>
+            <select id="communityFilter" class="btn ghost" style="display:none">
+              <option value="">All Communities</option>
+              <option value="tech">Tech</option>
+              <option value="food">Food</option>
+              <option value="outdoor">Outdoor</option>
+              <option value="gaming">Gaming</option>
+              <option value="startup">Startup</option>
+            </select>
+          </div>
+
+          <div class="logs" id="logs"></div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- Modal: Food analyze / Log -->
+    <div class="modal-back" id="modalBack">
+      <div class="modal" role="dialog" aria-modal="true" id="modal">
+        <h4 id="modalTitle">Analyze Meal</h4>
+        <div id="modalBody">
+          <div class="row">
+            <label style="min-width: 80px">Item</label>
+            <input id="foodName" placeholder="e.g., Grilled chicken + rice" />
+          </div>
+          <div class="row">
+            <label style="min-width: 80px">Portion</label>
+            <select id="portion">
+              <option value="0.5">Small (~0.5x)</option>
+              <option value="1" selected>Normal (~1x)</option>
+              <option value="1.5">Large (~1.5x)</option>
+              <option value="2">Extra (2x)</option>
+            </select>
+          </div>
+          <div class="row">
+            <label style="min-width: 80px">Method</label>
+            <select id="method">
+              <option value="fried">Fried</option>
+              <option value="grilled" selected>Grilled</option>
+              <option value="boiled">Boiled</option>
+              <option value="raw">Raw</option>
+            </select>
+          </div>
+
+          <div style="display: flex; gap: 8px; margin-top: 10px">
+            <button id="estimateFood" class="btn">Estimate & Log</button>
+            <button id="cancelModal" class="btn ghost">Cancel</button>
+          </div>
+
+          <small class="muted" style="display: block; margin-top: 8px"
+            >This is a prototype estimator — values are illustrative.</small
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Activity estimate -->
+    <div class="modal-back" id="modalBack2">
+      <div class="modal" role="dialog" aria-modal="true" id="modal2">
+        <h4 id="modalTitle2">Estimate Activity Burn</h4>
+        <div id="modalBody2">
+          <div class="row">
+            <label style="min-width: 80px">Route</label>
+            <input id="routeName" placeholder="e.g., Ridge trail loop" />
+          </div>
+          <div class="row">
+            <label style="min-width: 80px">Weight (kg)</label>
+            <input id="weight" type="number" min="30" value="70" />
+          </div>
+          <div class="row">
+            <label style="min-width: 80px">Duration</label>
+            <input id="duration" type="number" min="0.1" step="0.1" value="2" />
+            <small style="color: var(--muted); margin-left: 8px">hrs</small>
+          </div>
+          <div class="row">
+            <label style="min-width: 80px">Intensity</label>
+            <select id="intensity">
+              <option value="4">Easy (MET 4)</option>
+              <option value="6">Moderate (MET 6)</option>
+              <option value="8">Hard (MET 8)</option>
+              <option value="10">Very hard (MET 10)</option>
+            </select>
+          </div>
+
+          <div style="display: flex; gap: 8px; margin-top: 10px">
+            <button id="estimateAct" class="btn">Estimate & Log</button>
+            <button id="cancelModal2" class="btn ghost">Cancel</button>
+          </div>
+
+          <small class="muted" style="display: block; margin-top: 8px"
+            >Estimation uses MET: calories = MET * weight(kg) * hours</small
+          >
+        </div>
+      </div>
+    </div>
+
+    <script>
+      /* Prototype app logic: feed data, filters, lightweight logging & aggregation in localStorage */
+
+      const sampleFeed = [
+        // Food & Restaurant Events
+        {
+          id: 1,
+          type: "food",
+          category: "meal",
+          title: "Grilled Chicken + Rice",
+          desc: "Protein-rich dinner, ~balanced macros",
+          baseKcal: 520,
+        },
+        {
+          id: 2,
+          type: "food",
+          category: "restaurant",
+          title: "Wine & Dine Wednesday @ Bella Vista",
+          desc: "3-course Italian dinner with wine pairing. Special: $45/person",
+          baseKcal: 850,
+          price: "$45",
+          date: "2025-11-05",
+        },
+        {
+          id: 3,
+          type: "food",
+          category: "event",
+          title: "Halloween Party @ Sky Lounge",
+          desc: "Spooky cocktails, themed appetizers, costume contest",
+          baseKcal: 600,
+          price: "$30",
+          date: "2025-10-31",
+        },
+        {
+          id: 4,
+          type: "food",
+          category: "drinks",
+          title: "Craft Beer Festival",
+          desc: "30+ local breweries, food trucks, live music",
+          location: "Downtown Plaza",
+          date: "2025-11-15",
+        },
+        {
+          id: 5,
+          type: "food",
+          category: "date",
+          title: "Romantic Sunset Dinner Cruise",
+          desc: "3-hour harbor cruise, 4-course dinner, champagne",
+          price: "$120/couple",
+          date: "2025-11-08",
+        },
+        {
+          id: 6,
+          type: "food",
+          category: "meal",
+          title: "Veggie Salad Bowl",
+          desc: "Mixed greens, chickpeas, olive oil",
+          baseKcal: 320,
+        },
+        {
+          id: 7,
+          type: "food",
+          category: "event",
+          title: "Wine Tasting Masterclass",
+          desc: "Premium wines, cheese pairing, expert sommelier",
+          price: "$75",
+          date: "2025-11-20",
+        },
+        {
+          id: 8,
+          type: "food",
+          category: "restaurant",
+          title: "Taco Tuesday Special",
+          desc: "All-you-can-eat tacos + margarita",
+          baseKcal: 800,
+          price: "$25",
+          date: "Every Tuesday",
+        },
+
+        // Outdoor & Sports Events
+        {
+          id: 9,
+          type: "outdoor",
+          category: "hike",
+          title: "Ridge Trail Loop",
+          desc: "6.5 km, +420m elevation",
+          estMET: 6,
+          estHours: 2,
+        },
+        {
+          id: 10,
+          type: "outdoor",
+          category: "cycling",
+          title: "City Night Ride",
+          desc: "Group cycling event, 15km scenic route",
+          estMET: 8,
+          estHours: 1.5,
+          date: "2025-11-02",
+        },
+        {
+          id: 11,
+          type: "outdoor",
+          category: "motorsport",
+          title: "Street Racing Championship",
+          desc: "Modified cars, drag racing, car show",
+          location: "Speedway Arena",
+          date: "2025-11-09",
+        },
+        {
+          id: 12,
+          type: "outdoor",
+          category: "sport",
+          title: "Basketball Tournament",
+          desc: "3v3 street basketball, cash prizes",
+          location: "Central Park Courts",
+          date: "2025-11-16",
+        },
+        {
+          id: 13,
+          type: "outdoor",
+          category: "concert",
+          title: "Hip Hop Festival",
+          desc: "Local artists, freestyle battles, street food",
+          price: "$40",
+          date: "2025-11-22",
+        },
+        {
+          id: 14,
+          type: "outdoor",
+          category: "adventure",
+          title: "Rock Climbing Day",
+          desc: "Beginner friendly, equipment provided",
+          estMET: 7,
+          estHours: 3,
+          price: "$50",
+          date: "2025-11-23",
+        },
+        {
+          id: 15,
+          type: "outdoor",
+          category: "motorsport",
+          title: "Superbike Expo",
+          desc: "Latest models, test rides, stunts show",
+          location: "Exhibition Center",
+          date: "2025-11-30",
+        },
+        {
+          id: 16,
+          type: "outdoor",
+          category: "cycling",
+          title: "Mountain Bike Trail Race",
+          desc: "25km technical trail, prizes",
+          estMET: 10,
+          estHours: 2,
+          date: "2025-12-01",
+        },
+
+        // Holiday Special Events
+        {
+          id: 17,
+          type: "food",
+          category: "holiday",
+          title: "Thanksgiving Feast",
+          desc: "Traditional dinner buffet, live music",
+          baseKcal: 1200,
+          price: "$55",
+          date: "2025-11-28",
+        },
+        {
+          id: 18,
+          type: "food",
+          category: "holiday",
+          title: "Christmas Market & Food Fair",
+          desc: "Artisan goods, mulled wine, seasonal treats",
+          location: "City Square",
+          date: "2025-12-15",
+        },
+        {
+          id: 19,
+          type: "outdoor",
+          category: "holiday",
+          title: "New Year Marathon",
+          desc: "10k/21k routes, fireworks finish",
+          estMET: 8,
+          estHours: 2,
+          date: "2025-12-31",
+        },
+        {
+          id: 20,
+          type: "food",
+          category: "date",
+          title: "Valentine's Chocolate Making",
+          desc: "Couples workshop, wine included",
+          price: "$90/couple",
+          date: "2026-02-14",
+        },
+
+        // Tech & Community Events
+        {
+          id: 30,
+          type: "community",
+          category: "tech",
+          title: "AI Hackathon 2025",
+          desc: "48hr coding challenge, $10k prizes, all skill levels welcome",
+          date: "2025-11-15",
+          price: "Free",
+          location: "Tech Hub Downtown",
+          community: "Tech Innovators",
+        },
+        {
+          id: 31,
+          type: "community",
+          category: "tech",
+          title: "Web3 Developer Conference",
+          desc: "Blockchain workshops, networking, startup showcase",
+          date: "2025-11-20",
+          price: "$199",
+          location: "Convention Center",
+          community: "Blockchain Builders",
+        },
+        {
+          id: 32,
+          type: "community",
+          category: "gaming",
+          title: "ESports Tournament",
+          desc: "League of Legends & Valorant competitions",
+          date: "2025-11-25",
+          price: "$20",
+          location: "Gaming Arena",
+          community: "Pro Gamers League",
+        },
+        {
+          id: 33,
+          type: "community",
+          category: "startup",
+          title: "Startup Weekend",
+          desc: "Build MVP in 54 hours, mentorship, pitch competition",
+          date: "2025-12-01",
+          price: "$75",
+          location: "Innovation Hub",
+          community: "Founder Network",
+        },
+
+        // Special Interest Communities
+        {
+          id: 34,
+          type: "community",
+          category: "food",
+          title: "Chef's Society Meetup",
+          desc: "Monthly cooking demos & tastings",
+          date: "Monthly",
+          community: "Chef's Society",
+        },
+        {
+          id: 35,
+          type: "community",
+          category: "outdoor",
+          title: "Trail Runners Club",
+          desc: "Weekly group runs, all levels",
+          date: "Weekly",
+          community: "Trail Runners",
+        },
+        {
+          id: 36,
+          type: "community",
+          category: "tech",
+          title: "Python Developers Meetup",
+          desc: "Code workshops & lightning talks",
+          date: "Monthly",
+          community: "Python Devs",
+        },
+      ];
+
+      let activeSeg = "all"; // all|food|outdoor
+      let subscribedCommunities = [];
+
+      // DOM refs
+      const feedEl = document.getElementById("feed");
+      const logsEl = document.getElementById("logs");
+      const todayTotalEl = document.getElementById("todayTotal");
+      const weekTotalEl = document.getElementById("weekTotal");
+      const monthTotalEl = document.getElementById("monthTotal");
+
+      const modalBack = document.getElementById("modalBack");
+      const modalBack2 = document.getElementById("modalBack2");
+
+      // Load subscribed communities from localStorage
+      function loadSubscriptions() {
+        try {
+          subscribedCommunities = JSON.parse(
+            localStorage.getItem("dv_subscriptions") || "[]"
+          );
+        } catch (e) {
+          subscribedCommunities = [];
+        }
+      }
+
+      // Save subscription
+      function subscribeToCommunity(communityId) {
+        if (!subscribedCommunities.includes(communityId)) {
+          subscribedCommunities.push(communityId);
+          localStorage.setItem(
+            "dv_subscriptions",
+            JSON.stringify(subscribedCommunities)
+          );
+        }
+        renderFeed(); // Refresh to update UI
+      }
+
+      // attach header buttons
+      document.querySelectorAll(".logo-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll(".logo-btn")
+            .forEach((b) => b.classList.add("dim"));
+          btn.classList.remove("dim");
+          activeSeg = btn.dataset.seg === "out" ? "outdoor" : btn.dataset.seg;
+          renderFeed();
+        });
+      });
+
+      // side filters
+      document.querySelectorAll(".filters button").forEach((b) => {
+        b.addEventListener("click", () => {
+          const f = b.dataset.filter;
+          activeSeg = f === "all" ? "all" : f;
+          document
+            .querySelectorAll(".logo-btn")
+            .forEach((bb) => bb.classList.add("dim"));
+          // reflect selection in logos (simple)
+          if (f === "all")
+            document.getElementById("allBtn").classList.remove("dim");
+          if (f === "food")
+            document.getElementById("foodBtn").classList.remove("dim");
+          if (f === "outdoor")
+            document.getElementById("outBtn").classList.remove("dim");
+          renderFeed();
+        });
+      });
+
+      // Community filter change
+      document.getElementById('communityFilter').addEventListener('change', (e) => {
+        const filter = e.target.value;
+        renderFeed(filter);
+      });
+
+      // Enhanced rendering to show dates, prices, locations
+      function renderFeed(communityFilter = "") {
+        feedEl.innerHTML = "";
+        const items = sampleFeed.filter((it) =>
+          activeSeg === "all" ? true : it.type === activeSeg
+        );
+        if (items.length === 0) {
+          feedEl.innerHTML =
+            '<div style="padding:20px;color:var(--muted)">No items in this segment.</div>';
+          return;
+        }
+        items.forEach((it) => {
+          const div = document.createElement("div");
+          div.className = "item";
+          div.innerHTML = `
+      <div class="thumb">${it.type === "food" ? "🍽" : "🥾"}</div>
+      <div class="meta">
+        <h3>${it.title}</h3>
+        <p>${it.desc}</p>
+        ${
+          it.date
+            ? `<small style="color:var(--accent-2)">📅 ${it.date}</small>`
+            : ""
+        }
+        ${
+          it.price
+            ? `<small style="color:var(--accent);margin-left:12px">💰 ${it.price}</small>`
+            : ""
+        }
+        ${
+          it.location
+            ? `<small style="color:var(--muted);margin-left:12px">📍 ${it.location}</small>`
+            : ""
+        }
+        <div style="display:flex; gap:8px; align-items:center; margin-top:8px">
+          <div class="actions"></div>
+        </div>
+      </div>
+    `;
+          const actions = div.querySelector(".actions");
+          if (it.type === "food") {
+            const analyze = document.createElement("button");
+            analyze.className = "btn";
+            analyze.textContent = "Analyze Meal";
+            analyze.addEventListener("click", () => openFoodModal(it));
+            const quickLog = document.createElement("button");
+            quickLog.className = "btn ghost";
+            quickLog.textContent = "Quick Log";
+            quickLog.addEventListener("click", () =>
+              logFood(it.title, it.baseKcal)
+            );
+            actions.appendChild(analyze);
+            actions.appendChild(quickLog);
+          } else {
+            const estimate = document.createElement("button");
+            estimate.className = "btn";
+            estimate.textContent = "Estimate Burn";
+            estimate.addEventListener("click", () => openActModal(it));
+            const quickLog = document.createElement("button");
+            quickLog.className = "btn ghost";
+            quickLog.textContent = "Quick Log";
+            quickLog.addEventListener("click", () => {
+              // compute default estimation: MET*weight(70)*hours
+              const kcal = (it.estMET || 6) * 70 * (it.estHours || 1);
+              logActivity(it.title, Math.round(kcal));
+            });
+            actions.appendChild(estimate);
+            actions.appendChild(quickLog);
+          }
+          // Add community-specific UI elements
+          if (it.community) {
+            const isSubscribed = subscribedCommunities.includes(it.community);
+            const subBtn = document.createElement("button");
+            subBtn.className = `btn ${isSubscribed ? "ghost" : ""}`;
+            subBtn.textContent = isSubscribed ? "Subscribed" : "Subscribe";
+            subBtn.addEventListener("click", () => subscribeToCommunity(it.community));
+            actions.appendChild(subBtn);
+          }
+          feedEl.appendChild(div);
+        });
+      }
+
+      /* Logging (localStorage) */
+      function getLogs() {
+        try {
+          return JSON.parse(localStorage.getItem("dv_logs") || "[]");
+        } catch (e) {
+          return [];
+        }
+      }
+      function saveLogs(arr) {
+        localStorage.setItem("dv_logs", JSON.stringify(arr));
+      }
+      function addLog(entry) {
+        const logs = getLogs();
+        logs.unshift(entry);
+        saveLogs(logs.slice(0, 500)); // keep last 500
+        renderLogs();
+        renderSummary();
+      }
+
+      function logFood(name, kcal) {
+        addLog({
+          type: "food",
+          name: name,
+          kcal: Math.round(kcal),
+          ts: new Date().toISOString(),
+        });
+        alert(`Logged ${name} — ${Math.round(kcal)} kcal`);
+      }
+      function logActivity(name, kcal) {
+        addLog({
+          type: "outdoor",
+          name: name,
+          kcal: Math.round(kcal),
+          ts: new Date().toISOString(),
+        });
+        alert(`Logged activity ${name} — ${Math.round(kcal)} kcal burned`);
+      }
+
+      function renderLogs(filter = "all") {
+        const logs = getLogs();
+        logsEl.innerHTML = "";
+        if (logs.length === 0) {
+          logsEl.innerHTML =
+            '<div style="padding:12px;color:var(--muted)">No logs yet. Use "Analyze Meal" or "Estimate Burn".</div>';
+          return;
+        }
+        logs.forEach((l) => {
+          if (filter !== "all" && l.type !== filter) return;
+          const d = new Date(l.ts);
+          const el = document.createElement("div");
+          el.className = "log-entry";
+          el.innerHTML = `<div style="min-width:0"><strong style="color:${
+            l.type === "food" ? "var(--accent-2)" : "var(--accent)"
+          }">${
+            l.name
+          }</strong><small style="display:block;color:var(--muted)">${d.toLocaleString()}</small></div><div style="text-align:right"><span style="font-weight:700">${
+            l.kcal
+          } kcal</span><div style="font-size:12px;color:var(--muted)">${
+            l.type
+          }</div></div>`;
+          logsEl.appendChild(el);
+        });
+      }
+
+      /* Aggregation: daily / weekly / monthly totals (kcal consumed positive, burned negative) */
+      function summarizeRange(startDate, endDate) {
+        const logs = getLogs();
+        let total = 0;
+        logs.forEach((l) => {
+          const t = new Date(l.ts);
+          if (t >= startDate && t <= endDate) {
+            total += l.type === "food" ? l.kcal : -l.kcal; // consumed positive, burned negative
+          }
+        });
+        return total;
+      }
+
+      function startOfDay(d) {
+        const x = new Date(d);
+        x.setHours(0, 0, 0, 0);
+        return x;
+      }
+      function startOfWeek(d) {
+        const x = startOfDay(d);
+        const day = x.getDay();
+        const diff = (day + 6) % 7;
+        x.setDate(x.getDate() - diff);
+        return x;
+      } // Monday
+      function startOfMonth(d) {
+        const x = new Date(d);
+        x.setDate(1);
+        x.setHours(0, 0, 0, 0);
+        return x;
+      }
+
+      function renderSummary() {
+        const now = new Date();
+        const todayStart = startOfDay(now);
+        const weekStart = startOfWeek(now);
+        const monthStart = startOfMonth(now);
+        const today = summarizeRange(todayStart, now);
+        const week = summarizeRange(weekStart, now);
+        const month = summarizeRange(monthStart, now);
+        // show net kcal (positive = surplus consumed), display absolute numbers with labels for clarity
+        todayTotalEl.textContent = `${today >= 0 ? "+" : ""}${today} kcal`;
+        weekTotalEl.textContent = `${week >= 0 ? "+" : ""}${week} kcal`;
+        monthTotalEl.textContent = `${month >= 0 ? "+" : ""}${month} kcal`;
+      }
+
+      /* Modals & estimators */
+      function openFoodModal(item) {
+        modalBack.style.display = "flex";
+        document.getElementById("foodName").value = item ? item.title : "";
+        document.getElementById("portion").value = "1";
+        document.getElementById("method").value = "grilled";
+        // store base kcal on modal element for reference
+        modalBack.dataset.base = item ? item.baseKcal || 400 : 400;
+      }
+
+      function closeFoodModal() {
+        modalBack.style.display = "none";
+        delete modalBack.dataset.base;
+      }
+      document
+        .getElementById("cancelModal")
+        .addEventListener("click", closeFoodModal);
+      document.getElementById("estimateFood").addEventListener("click", () => {
+        const name = document.getElementById("foodName").value || "Meal";
+        const portion = parseFloat(document.getElementById("portion").value);
+        const method = document.getElementById("method").value;
+        const base = Number(modalBack.dataset.base || 400);
+        // simple method multiplier
+        const methodMult =
+          { fried: 1.4, grilled: 1.0, boiled: 0.9, raw: 0.8 }[method] || 1;
+        const kcal = Math.round(base * portion * methodMult);
+        logFood(name, kcal);
+        closeFoodModal();
+        renderFeed();
+      });
+
+      function openActModal(item) {
+        modalBack2.style.display = "flex";
+        document.getElementById("routeName").value = item ? item.title : "";
+        document.getElementById("weight").value = 70;
+        document.getElementById("duration").value = item
+          ? item.estHours || 1
+          : 1;
+        document.getElementById("intensity").value = item
+          ? item.estMET || 6
+          : 6;
+      }
+      function closeActModal() {
+        modalBack2.style.display = "none";
+      }
+
+      document
+        .getElementById("cancelModal2")
+        .addEventListener("click", closeActModal);
+      document.getElementById("estimateAct").addEventListener("click", () => {
+        const name = document.getElementById("routeName").value || "Activity";
+        const weight = Number(document.getElementById("weight").value) || 70;
+        const hours = Number(document.getElementById("duration").value) || 1;
+        const MET = Number(document.getElementById("intensity").value) || 6;
+        const kcal = Math.round(MET * weight * hours);
+        logActivity(name, kcal);
+        closeActModal();
+        renderFeed();
+      });
+
+      /* clear logs */
+      document.getElementById("clearLogs").addEventListener("click", () => {
+        if (!confirm("Clear all logs?")) return;
+        localStorage.removeItem("dv_logs");
+        renderLogs();
+        renderSummary();
+      });
+
+      /* init */
+      loadSubscriptions();
+      renderFeed();
+      renderLogs();
+      renderSummary();
+    </script>
+  </body>
+</html>
