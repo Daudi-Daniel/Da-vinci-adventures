@@ -364,17 +364,50 @@
         font-size: 12px;
         margin-bottom: 4px;
       }
+
+      /* Top search bar (inline, just below calories meter) */
+      .top-search {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        margin-left: 12px;
+        margin-top: 10px;
+      }
+      .search-input {
+        flex: 1;
+        padding: 8px 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        background: rgba(255, 255, 255, 0.03);
+        color: inherit;
+      }
+      .search-btn {
+        padding: 8px 12px;
+        border-radius: 10px;
+        border: 0;
+        background: var(--accent-2);
+        color: #031021;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      /* small refinement to ai-chat when placed near top */
+      .ai-chat {
+        margin-top: 12px;
+      }
+      .chat-messages {
+        max-height: 160px;
+      } /* compact preview at top */
     </style>
   </head>
   <body>
     <div class="app">
       <div class="top">
         <div class="logos" role="tablist" aria-label="Segments">
-  <div id="allBtn" class="logo-btn" data-seg="all" title="All">ALL</div>
-  <div id="foodBtn" class="logo-btn dim" data-seg="food" title="Food">FOOD</div>
-  <div id="outBtn" class="logo-btn dim" data-seg="outdoor" title="Outdoor">OUT</div>
-  <div id="comBtn" class="logo-btn dim" data-seg="community" title="Communities">COM</div>
-</div>
+          <div id="allBtn" class="logo-btn" data-seg="all" title="All">ALL</div>
+          <div id="foodBtn" class="logo-btn dim" data-seg="food" title="Food">
+            FOOD
+          </div>
           <div
             id="outBtn"
             class="logo-btn dim"
@@ -382,6 +415,14 @@
             title="Outdoor"
           >
             OUT
+          </div>
+          <div
+            id="comBtn"
+            class="logo-btn dim"
+            data-seg="community"
+            title="Communities"
+          >
+            COM
           </div>
         </div>
 
@@ -395,6 +436,37 @@
               <small>Monthly</small><b id="monthTotal">0 kcal</b>
             </div>
           </div>
+
+          <!-- top search placed just below the calories meter visually -->
+          <div class="top-search" role="search" aria-label="Quick event search">
+            <input
+              id="topSearch"
+              class="search-input"
+              type="search"
+              placeholder="Quick search events — e.g. 'hike next weekend under $50'"
+            />
+            <button id="topSearchBtn" class="search-btn">Search</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Chat (compact) directly under top area for quick queries -->
+      <div class="ai-chat" aria-live="polite">
+        <div class="chat-messages" id="chatMessages">
+          <div class="message system">
+            Hi — describe what you want and I'll find matching events. Examples:
+            "outdoor events next weekend", "food under $50", "hackathon near
+            me".
+          </div>
+        </div>
+        <div class="chat-input" style="padding: 10px">
+          <input
+            type="text"
+            id="aiQuery"
+            class="search-input"
+            placeholder="Describe your criteria..."
+          />
+          <button class="btn" id="searchBtn">Search</button>
         </div>
       </div>
 
@@ -428,7 +500,11 @@
             <button class="btn ghost" data-filter="all">All</button>
             <button class="btn ghost" data-filter="food">Food</button>
             <button class="btn ghost" data-filter="outdoor">Outdoor</button>
-            <select id="communityFilter" class="btn ghost" style="display:none">
+            <select
+              id="communityFilter"
+              class="btn ghost"
+              style="display: none"
+            >
               <option value="">All Communities</option>
               <option value="tech">Tech</option>
               <option value="food">Food</option>
@@ -446,12 +522,17 @@
       <div class="ai-chat">
         <div class="chat-messages" id="chatMessages">
           <div class="message system">
-            Hi! I can help find events matching your criteria. Try describing what you're looking for, like:
-            "outdoor events next weekend" or "food events under $50 this month"
+            Hi! I can help find events matching your criteria. Try describing
+            what you're looking for, like: "outdoor events next weekend" or
+            "food events under $50 this month"
           </div>
         </div>
         <div class="chat-input">
-          <input type="text" id="aiQuery" placeholder="Describe what you're looking for..." />
+          <input
+            type="text"
+            id="aiQuery"
+            placeholder="Describe what you're looking for..."
+          />
           <button class="btn" id="searchBtn">Search</button>
         </div>
       </div>
@@ -878,10 +959,12 @@
       });
 
       // Community filter change
-      document.getElementById('communityFilter').addEventListener('change', (e) => {
-        const filter = e.target.value;
-        renderFeed(filter);
-      });
+      document
+        .getElementById("communityFilter")
+        .addEventListener("change", (e) => {
+          const filter = e.target.value;
+          renderFeed(filter);
+        });
 
       // Enhanced rendering to show dates, prices, locations
       function renderFeed(source = "") {
@@ -891,39 +974,58 @@
         if (Array.isArray(source)) {
           items = source;
         } else {
-          items = sampleFeed.filter((it) => (activeSeg === "all" ? true : it.type === activeSeg));
+          items = sampleFeed.filter((it) =>
+            activeSeg === "all" ? true : it.type === activeSeg
+          );
           if (typeof source === "string" && source) {
             items = items.filter(
               (it) =>
                 it.community === source ||
                 it.category === source ||
                 it.type === source ||
-                (it.date && it.date.toLowerCase().includes(source.toLowerCase()))
+                (it.date &&
+                  it.date.toLowerCase().includes(source.toLowerCase()))
             );
           }
         }
         if (items.length === 0) {
-          feedEl.innerHTML = '<div style="padding:20px;color:var(--muted)">No items in this segment.</div>';
+          feedEl.innerHTML =
+            '<div style="padding:20px;color:var(--muted)">No items in this segment.</div>';
           return;
         }
         items.forEach((it) => {
           const div = document.createElement("div");
           div.className = "item";
           div.innerHTML = `
-      <div class="thumb">${it.type === "food" ? "🍽" : it.type === "community" ? "👥" : "🥾"}</div>
+      <div class="thumb">${
+        it.type === "food" ? "🍽" : it.type === "community" ? "👥" : "🥾"
+      }</div>
       <div class="meta">
         <h3>${it.title}</h3>
         <p>${it.desc}</p>
-        ${it.date ? `<small style="color:var(--accent-2)">📅 ${it.date}</small>` : ""}
-        ${it.price ? `<small style="color:var(--accent);margin-left:12px">💰 ${it.price}</small>` : ""}
-        ${it.location ? `<small style="color:var(--muted);margin-left:12px">📍 ${it.location}</small>` : ""}
+        ${
+          it.date
+            ? `<small style="color:var(--accent-2)">📅 ${it.date}</small>`
+            : ""
+        }
+        ${
+          it.price
+            ? `<small style="color:var(--accent);margin-left:12px">💰 ${it.price}</small>`
+            : ""
+        }
+        ${
+          it.location
+            ? `<small style="color:var(--muted);margin-left:12px">📍 ${it.location}</small>`
+            : ""
+        }
         <div style="display:flex; gap:8px; align-items:center; margin-top:8px">
           <div class="actions"></div>
         </div>
       </div>
     `;
           const actions = div.querySelector(".actions");
-          // action buttons
+
+          // Food: analyze / quick log
           if (it.type === "food") {
             const analyze = document.createElement("button");
             analyze.className = "btn";
@@ -932,10 +1034,14 @@
             const quickLog = document.createElement("button");
             quickLog.className = "btn ghost";
             quickLog.textContent = "Quick Log";
-            quickLog.addEventListener("click", () => logFood(it.title, it.baseKcal));
+            quickLog.addEventListener("click", () =>
+              logFood(it.title, it.baseKcal)
+            );
             actions.appendChild(analyze);
             actions.appendChild(quickLog);
-          } else {
+
+          // Outdoor: estimate burn / quick log
+          } else if (it.type === "outdoor") {
             const estimate = document.createElement("button");
             estimate.className = "btn";
             estimate.textContent = "Estimate Burn";
@@ -949,9 +1055,9 @@
             });
             actions.appendChild(estimate);
             actions.appendChild(quickLog);
-          }
-          // community subscription
-          if (it.community) {
+
+          // Community: only subscription / view actions (no burn)
+          } else if (it.type === "community") {
             const isSubscribed = subscribedCommunities.includes(it.community);
             const subBtn = document.createElement("button");
             subBtn.className = `btn ${isSubscribed ? "ghost" : ""}`;
@@ -960,7 +1066,17 @@
               subscribeToCommunity(it.community);
             });
             actions.appendChild(subBtn);
+
+            const viewBtn = document.createElement("button");
+            viewBtn.className = "btn ghost";
+            viewBtn.textContent = "View Community";
+            viewBtn.addEventListener("click", () => {
+              // simple behavior: filter feed to this community
+              renderFeed(it.community);
+            });
+            actions.appendChild(viewBtn);
           }
+
           // append reviews block
           const reviewsNode = renderReviews(it.id);
           div.querySelector(".meta").appendChild(reviewsNode);
@@ -981,7 +1097,7 @@
           const star = document.createElement("span");
           star.className = `star ${i <= reviews.rating ? "filled" : ""}`;
           star.innerHTML = "★";
-          star.title = `${i} star${i>1?'s':''}`;
+          star.title = `${i} star${i > 1 ? "s" : ""}`;
           star.onclick = () => {
             rateItem(itemId, i);
           };
@@ -995,18 +1111,21 @@
         if (reviews.comments.length === 0) {
           comments.innerHTML = `<div style="color:var(--muted);font-size:13px;margin-top:8px">No comments yet</div>`;
         } else {
-          reviews.comments.slice().reverse().forEach((c) => {
-            const cnode = document.createElement("div");
-            cnode.className = "comment";
-            cnode.innerHTML = `
+          reviews.comments
+            .slice()
+            .reverse()
+            .forEach((c) => {
+              const cnode = document.createElement("div");
+              cnode.className = "comment";
+              cnode.innerHTML = `
               <div class="comment-header">
                 <span>${escapeHtml(c.user)}</span>
                 <span>${new Date(c.date).toLocaleString()}</span>
               </div>
               <div>${escapeHtml(c.text)}</div>
             `;
-            comments.appendChild(cnode);
-          });
+              comments.appendChild(cnode);
+            });
         }
         div.appendChild(comments);
 
@@ -1038,7 +1157,12 @@
       // review/comment storage helpers
       function getReviews(itemId) {
         try {
-          return JSON.parse(localStorage.getItem(`dv_reviews_${itemId}`)) || { rating: 0, comments: [] };
+          return (
+            JSON.parse(localStorage.getItem(`dv_reviews_${itemId}`)) || {
+              rating: 0,
+              comments: [],
+            }
+          );
         } catch (e) {
           return { rating: 0, comments: [] };
         }
@@ -1059,7 +1183,11 @@
       function addComment(itemId, text) {
         const r = getReviews(itemId);
         r.comments = r.comments || [];
-        r.comments.push({ user: "You", date: new Date().toISOString(), text: text });
+        r.comments.push({
+          user: "You",
+          date: new Date().toISOString(),
+          text: text,
+        });
         saveReviews(itemId, r);
         renderFeed(); // re-render to show new comment
       }
@@ -1252,64 +1380,89 @@
       });
 
       /* Add to existing JavaScript */
-function searchEvents(query) {
-  // Simple keyword matching for prototype
-  const keywords = query.toLowerCase().split(' ');
-  
-  return sampleFeed.filter(event => {
-    const searchText = `${event.title} ${event.desc} ${event.category} ${event.type}`.toLowerCase();
-    
-    // Match keywords
-    const matches = keywords.some(k => searchText.includes(k));
-    
-    // Date filtering
-    if(query.includes('weekend') && event.date) {
-      const eventDate = new Date(event.date);
-      const isWeekend = eventDate.getDay() === 0 || eventDate.getDay() === 6;
-      return matches && isWeekend;
-    }
-    
-    // Price filtering
-    if(query.includes('under')) {
-      const priceMatch = query.match(/under \$(\d+)/);
-      if(priceMatch && event.price) {
-        const maxPrice = parseInt(priceMatch[1]);
-        const eventPrice = parseInt(event.price.replace(/[^\d]/g, ''));
-        return matches && eventPrice <= maxPrice;
-      }
-    }
-    
-    return matches;
-  });
-}
+      function searchEvents(query) {
+        // Simple keyword matching for prototype
+        const keywords = query.toLowerCase().split(" ");
 
-document.getElementById('searchBtn').addEventListener('click', () => {
-  const query = document.getElementById('aiQuery').value;
-  const chatMessages = document.getElementById('chatMessages');
-  
-  // Add user message
-  chatMessages.innerHTML += `
+        return sampleFeed.filter((event) => {
+          const searchText =
+            `${event.title} ${event.desc} ${event.category} ${event.type}`.toLowerCase();
+
+          // Match keywords
+          const matches = keywords.some((k) => searchText.includes(k));
+
+          // Date filtering
+          if (query.includes("weekend") && event.date) {
+            const eventDate = new Date(event.date);
+            const isWeekend =
+              eventDate.getDay() === 0 || eventDate.getDay() === 6;
+            return matches && isWeekend;
+          }
+
+          // Price filtering
+          if (query.includes("under")) {
+            const priceMatch = query.match(/under \$(\d+)/);
+            if (priceMatch && event.price) {
+              const maxPrice = parseInt(priceMatch[1]);
+              const eventPrice = parseInt(event.price.replace(/[^\d]/g, ""));
+              return matches && eventPrice <= maxPrice;
+            }
+          }
+
+          return matches;
+        });
+      }
+
+      document.getElementById("searchBtn").addEventListener("click", () => {
+        const query = document.getElementById("aiQuery").value;
+        const chatMessages = document.getElementById("chatMessages");
+
+        // Add user message
+        chatMessages.innerHTML += `
     <div class="message user">${query}</div>
   `;
-  
-  // Search and show results
-  const results = searchEvents(query);
-  
-  const response = results.length ? 
-    `I found ${results.length} matching events: ${
-      results.map(e => e.title).join(', ')
-    }` :
-    'Sorry, I couldn\'t find any events matching those criteria.';
-    
-  chatMessages.innerHTML += `
+
+        // Search and show results
+        const results = searchEvents(query);
+
+        const response = results.length
+          ? `I found ${results.length} matching events: ${results
+              .map((e) => e.title)
+              .join(", ")}`
+          : "Sorry, I couldn't find any events matching those criteria.";
+
+        chatMessages.innerHTML += `
     <div class="message ai">${response}</div>
   `;
-  
-  // Update feed to show only matching results
-  renderFeed(results);
-  
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-});
+
+        // Update feed to show only matching results
+        renderFeed(results);
+
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      });
+
+      // Hook top search to AI chat search (keeps single search handler)
+      document.getElementById("topSearchBtn").addEventListener("click", () => {
+        const q = document.getElementById("topSearch").value || "";
+        document.getElementById("aiQuery").value = q;
+        document.getElementById("searchBtn").click();
+      });
+      // allow Enter in the top search input
+      document.getElementById("topSearch").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          document.getElementById("topSearchBtn").click();
+        }
+      });
+      // allow Enter in AI query input
+      document.getElementById("aiQuery").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          document.getElementById("searchBtn").click();
+        }
+      });
+
+      // existing searchBtn handler remains and will update chat/messages + feed
 
       /* init */
       loadSubscriptions();
